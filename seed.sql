@@ -19,6 +19,6 @@ insert into role (title, salary, department_id)
     ("Anne", "Anderson", 5, NULL),
     ("Bryce", "Bingham", 2, NULL),
     ("Carol", "Coulson", 1, 1),
-    ("Drake", "Dixon", 4, null),
+    ("Drake", "Dixon", 4, NULL),
     ("Evelyn", "Emerson", 3, 2);
 
