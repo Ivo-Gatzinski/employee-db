@@ -1,19 +1,30 @@
-drop database if exists field_trip_db;
-create database field_trip_db;
-use field_trip_db;
+drop database if exists employees_db;
+create database employees_db;
+use employees_db;
 
-CREATE TABLE trips (
+CREATE TABLE department (
   id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  trip_date DATE NOT NULL,
-  destination VARCHAR(255) NOT NULL
+  name VARCHAR(30)
 );
 
-CREATE TABLE participants (
+CREATE TABLE role (
+  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  title VARCHAR(30) NOT NULL,
+  salary DECIMAL NOT NULL,
+  department_id INT,
+  FOREIGN KEY (department_id)
+  REFERENCES department(id)
+
+);
+
+CREATE TABLE employee (
   id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   first_name VARCHAR(30) NOT NULL,
   last_name VARCHAR(30) NOT NULL,
-  is_minor BOOLEAN NOT NULL DEFAULT false,
-  parent_id INT,
-  FOREIGN KEY (parent_id)
-  REFERENCES participants(id)
+  role_id INT NOT NULL,
+  FOREIGN KEY (role_id)
+  REFERENCES role(id),
+  manager_id INT,
+  FOREIGN KEY (manager_id)
+  REFERENCES employee(id)
 );

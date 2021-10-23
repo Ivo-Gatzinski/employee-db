@@ -1,16 +1,24 @@
-use field_trip_db;
+use employees_db;
 
-insert into trips (trip_date, destination)
+insert into department (name)
   VALUES 
-    ("2020-11-15", "Scripps Aquarium"),
-    ("2020-12-08", "Taylor Guitar Factory"),
-    ("2020-12-14", "Disneyland");
+    ("Engineering"),
+    ("HR"),
+    ("Legal");
 
-insert into participants (first_name, last_name, is_minor, parent_id)
+insert into role (title, salary, department_id)
   VALUES 
-    ("Ivo", "Gatzinski", false, null),
-    ("Bridgette", "Quiambao", false, null),
-    ("John", "Desrosiers", true, 1),
-    ("Erica", "Snyder", true, 1),
-    ("Elena", "Liu", true, 2);
+    ("Payroll Specialist", 50000, 2),
+    ("Software Engineer", 50000, 1),
+    ("Web Developer", 50000, 1),
+    ("Legal Consultant", 50000, 3),
+    ("Payroll Supervisor", 70000, 2);
+
+    insert into employee (first_name, last_name, role_id, manager_id)
+    VALUES
+    ("Anne", "Anderson", 5, NULL),
+    ("Bryce", "Bingham", 2, NULL),
+    ("Carol", "Coulson", 1, 1),
+    ("Drake", "Dixon", 4, null),
+    ("Evelyn", "Emerson", 3, 2);
 

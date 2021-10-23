@@ -1,9 +1,9 @@
-select first_name, last_name, is_minor from participants;
+select first_name, last_name, role_id from employee;
 
 select
   a.id,
   CONCAT(a.first_name, " ", a.last_name) AS name,
-  a.is_minor,
-  CONCAT(b.first_name, " ", b.last_name) AS parent
-from participants AS a LEFT JOIN participants AS b
-on a.parent_id = b.id;
+  a.role_id,
+  CONCAT(b.first_name, " ", b.last_name) AS manager
+from employee AS a LEFT JOIN employee AS b
+on a.manager_id = b.id;
