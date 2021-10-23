@@ -1,79 +1,54 @@
 const inquirer = require("inquirer");
 const path = require("path");
 const fs = require("fs");
-const sql = require("mysql2");
+const mysql = require("mysql2");
 
-const render = require("./src/page-template");
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
-const OUTPUT_DIR = path.resolve(__dirname, "dist");
-const outputPath = path.join(OUTPUT_DIR, "team.html");
+const db = mysql.createConnection(
+  {
+    host: 'localhost',
+    user: 'root',
+    password: 'EzhkoBezhko',
+    database: 'movie_db'
+  },
+);
 
-const teamMembers = [];
-const idArray = [];
-
-function appMenu() {
-  function createManager() {
-    console.log("Please build your team");
+  function generalMenu() {
+    console.log("Welcome to the Employee Database");
     inquirer
       .prompt([
         {
-          type: "input",
-          name: "managerName",
-          message: "What is the team manager's name?",
-          validate: (answer) => {
-            if (answer !== "") {
-              return true;
-            }
-            return "Please enter at least one character.";
-          },
-        },
-        {
-          type: "input",
-          name: "managerId",
-          message: "What is the team manager's id?",
-          validate: (answer) => {
-            const pass = answer.match(/^[1-9]\d*$/);
-            if (pass) {
-              return true;
-            }
-            return "Please enter a positive number greater than zero.";
-          },
-        },
-        {
-          type: "input",
-          name: "managerEmail",
-          message: "What is the team manager's email?",
-          validate: (answer) => {
-            const pass = answer.match(/\S+@\S+\.\S+/);
-            if (pass) {
-              return true;
-            }
-            return "Please enter a valid email address.";
-          },
-        },
-        {
-          type: "input",
-          name: "managerOfficeNumber",
-          message: "What is the team manager's office number?",
-          validate: (answer) => {
-            const pass = answer.match(/^[1-9]\d*$/);
-            if (pass) {
-              return true;
-            }
-            return "Please enter a positive number greater than zero.";
-          },
+          type: "list",
+          name: "generalMenu",
+          message: "What would you like to do?",
+          choices: ["View All Departments", 
+          "View All Roles", 
+          "View All Employees", 
+          "Add a Department", 
+          "Add a Role", 
+          "Add an Employee", 
+          "Update an Employee Role"],
         },
       ])
-      .then((answers) => {
-        const manager = new Manager(
-          answers.managerName,
-          answers.managerId,
-          answers.managerEmail,
-          answers.managerOfficeNumber
-        );
-        teamMembers.push(manager);
-        idArray.push(answers.managerId);
-        createTeam();
+      .then((answer) => {
+        switch(answer) {
+          case "View All Departments": db.query();
+            break;
+          case "View All Roles":
+            break;
+          case "View All Employees":
+            break;
+          case "Add a Department":
+            break;
+          case "Add a Role":
+            break;
+          case "Add an Employee":
+            break;
+          case "Update an Employee Role":
+            break;
+        }
       });
   }
 
@@ -237,15 +212,5 @@ function appMenu() {
       });
   }
 
-  function buildTeam() {
-    // Create the output directory if the output path doesn't exist
-    if (!fs.existsSync(OUTPUT_DIR)) {
-      fs.mkdirSync(OUTPUT_DIR);
-    }
-    fs.writeFileSync(outputPath, render(teamMembers), "utf-8");
-  }
 
-  createManager();
-}
-
-appMenu();
+generalMenu();
