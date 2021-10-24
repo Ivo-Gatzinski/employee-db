@@ -1,6 +1,5 @@
 const inquirer = require("inquirer");
 const mysql = require("mysql2");
-const table = require("table");
 
 const db = mysql.createConnection(
   {
@@ -11,23 +10,35 @@ const db = mysql.createConnection(
   },
 );
 
-function viewAll(answer) {
+function viewAllDept(answer) {
   db.promise().query("SELECT * FROM department;")
           .then( ([rows]) => {
             console.table(rows);
           })
           .catch(console.log);
-          getInput(input);
-          if (input) {
+          inquirer
+      .prompt([
+        {
+          type: "list",
+          name: "askAgain",
+          message: "Would you like to continue?",
+          choices: ["Yes", "No"],
+        },
+      ])
+      .then((answer) => {
+          if (answer === "Yes") {
             startAgain();
+          } else {
+            process.exit();
           }
           
+})
 };
 
 function startAgain() {
   console.clear();
   generalMenu();
-}
+};
 
   function generalMenu() {
     console.log("Welcome to the Employee Database!");
@@ -48,7 +59,7 @@ function startAgain() {
       ])
       .then((answer) => {
         switch(answer.generalMenu) {
-          case "View All Departments": viewAll(answer.generalMenu);
+          case "View All Departments": viewAllDept(answer.generalMenu);
             break;
           case "View All Roles":
             break;
