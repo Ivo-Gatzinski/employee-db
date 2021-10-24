@@ -6,3 +6,5 @@ select
   CONCAT(b.first_name, " ", b.last_name) AS manager
 from employee AS a LEFT JOIN employee AS b
 on a.manager_id = b.id;
+
+select * from department;

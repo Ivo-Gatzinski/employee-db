@@ -1,17 +1,36 @@
 const inquirer = require("inquirer");
 const mysql = require("mysql2");
+const table = require("table");
 
 const db = mysql.createConnection(
   {
     host: 'localhost',
     user: 'root',
     password: 'EzhkoBezhko',
-    database: 'employees_db'
+    database: 'employees_db',
   },
 );
 
+function viewAll(answer) {
+  db.promise().query("SELECT * FROM department;")
+          .then( ([rows]) => {
+            console.table(rows);
+          })
+          .catch(console.log);
+          getInput(input);
+          if (input) {
+            startAgain();
+          }
+          
+};
+
+function startAgain() {
+  console.clear();
+  generalMenu();
+}
+
   function generalMenu() {
-    console.log("Welcome to the Employee Database");
+    console.log("Welcome to the Employee Database!");
     inquirer
       .prompt([
         {
@@ -28,8 +47,8 @@ const db = mysql.createConnection(
         },
       ])
       .then((answer) => {
-        switch(answer) {
-          case "View All Departments": db.query();
+        switch(answer.generalMenu) {
+          case "View All Departments": viewAll(answer.generalMenu);
             break;
           case "View All Roles":
             break;
@@ -46,166 +65,5 @@ const db = mysql.createConnection(
         }
       });
   }
-
-  // function createTeam() {
-  //   inquirer
-  //     .prompt([
-  //       {
-  //         type: "list",
-  //         name: "memberChoice",
-  //         message: "Which type of team member would you like to add?",
-  //         choices: [
-  //           "Engineer",
-  //           "Intern",
-  //           "I don't want to add any more team members",
-  //         ],
-  //       },
-  //     ])
-  //     .then((userChoice) => {
-  //       switch (userChoice.memberChoice) {
-  //         case "Engineer":
-  //           addEngineer();
-  //           break;
-  //         case "Intern":
-  //           addIntern();
-  //           break;
-  //         default:
-  //           buildTeam();
-  //       }
-  //     });
-  // }
-
-  // function addEngineer() {
-  //   inquirer
-  //     .prompt([
-  //       {
-  //         type: "input",
-  //         name: "engineerName",
-  //         message: "What is your engineer's name?",
-  //         validate: (answer) => {
-  //           if (answer !== "") {
-  //             return true;
-  //           }
-  //           return "Please enter at least one character.";
-  //         },
-  //       },
-  //       {
-  //         type: "input",
-  //         name: "engineerId",
-  //         message: "What is your engineer's id?",
-  //         validate: (answer) => {
-  //           const pass = answer.match(/^[1-9]\d*$/);
-  //           if (pass) {
-  //             if (idArray.includes(answer)) {
-  //               return "This ID is already taken. Please enter a different number.";
-  //             }
-  //             return true;
-  //           }
-  //           return "Please enter a positive number greater than zero.";
-  //         },
-  //       },
-  //       {
-  //         type: "input",
-  //         name: "engineerEmail",
-  //         message: "What is your engineer's email?",
-  //         validate: (answer) => {
-  //           const pass = answer.match(/\S+@\S+\.\S+/);
-  //           if (pass) {
-  //             return true;
-  //           }
-  //           return "Please enter a valid email address.";
-  //         },
-  //       },
-  //       {
-  //         type: "input",
-  //         name: "engineerGithub",
-  //         message: "What is your engineer's GitHub username?",
-  //         validate: (answer) => {
-  //           if (answer !== "") {
-  //             return true;
-  //           }
-  //           return "Please enter at least one character.";
-  //         },
-  //       },
-  //     ])
-  //     .then((answers) => {
-  //       const engineer = new Engineer(
-  //         answers.engineerName,
-  //         answers.engineerId,
-  //         answers.engineerEmail,
-  //         answers.engineerGithub
-  //       );
-  //       teamMembers.push(engineer);
-  //       idArray.push(answers.engineerId);
-  //       createTeam();
-  //     });
-  // }
-
-  // function addIntern() {
-  //   inquirer
-  //     .prompt([
-  //       {
-  //         type: "input",
-  //         name: "internName",
-  //         message: "What is your intern's name?",
-  //         validate: (answer) => {
-  //           if (answer !== "") {
-  //             return true;
-  //           }
-  //           return "Please enter at least one character.";
-  //         },
-  //       },
-  //       {
-  //         type: "input",
-  //         name: "internId",
-  //         message: "What is your intern's id?",
-  //         validate: (answer) => {
-  //           const pass = answer.match(/^[1-9]\d*$/);
-  //           if (pass) {
-  //             if (idArray.includes(answer)) {
-  //               return "This ID is already taken. Please enter a different number.";
-  //             }
-  //             return true;
-  //           }
-  //           return "Please enter a positive number greater than zero.";
-  //         },
-  //       },
-  //       {
-  //         type: "input",
-  //         name: "internEmail",
-  //         message: "What is your intern's email?",
-  //         validate: (answer) => {
-  //           const pass = answer.match(/\S+@\S+\.\S+/);
-  //           if (pass) {
-  //             return true;
-  //           }
-  //           return "Please enter a valid email address.";
-  //         },
-  //       },
-  //       {
-  //         type: "input",
-  //         name: "internSchool",
-  //         message: "What is your intern's school?",
-  //         validate: (answer) => {
-  //           if (answer !== "") {
-  //             return true;
-  //           }
-  //           return "Please enter at least one character.";
-  //         },
-  //       },
-  //     ])
-  //     .then((answers) => {
-  //       const intern = new Intern(
-  //         answers.internName,
-  //         answers.internId,
-  //         answers.internEmail,
-  //         answers.internSchool
-  //       );
-  //       teamMembers.push(intern);
-  //       idArray.push(answers.internId);
-  //       createTeam();
-  //     });
-  // }
-
 
 generalMenu();
