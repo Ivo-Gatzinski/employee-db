@@ -8,7 +8,7 @@ const db = mysql.createConnection({
   database: "employees_db",
 });
 
-function viewAllDept(answer) {
+function viewAllDept() {
   return db
     .promise()
     .query("SELECT * FROM department;")
@@ -19,7 +19,7 @@ function viewAllDept(answer) {
     .catch(console.log);
 }
 
-function viewAllRoles(answer) {
+function viewAllRoles() {
   return db
     .promise()
     .query("select role.id, title, name AS department, salary from role JOIN department on role.department_id = department.id;")
@@ -30,7 +30,7 @@ function viewAllRoles(answer) {
     .catch(console.log);
 }
 
-function viewAllEmploy(answer) {
+function viewAllEmploy() {
   return db
     .promise()
     .query(
@@ -48,7 +48,7 @@ on a.manager_id = b.id;;`
     .catch(console.log);
 }
 
-function deptAdd(answer) {
+function deptAdd() {
   return inquirer
     .prompt([
       {
@@ -90,16 +90,16 @@ function generalMenu() {
     .then((answer) => {
       switch (answer.generalMenu) {
         case "View All Departments":
-          viewAllDept(answer.generalMenu);
+          viewAllDept();
           break;
         case "View All Roles":
-          viewAllRoles(answer.generalMenu);
+          viewAllRoles();
           break;
         case "View All Employees":
-          viewAllEmploy(answer.generalMenu);
+          viewAllEmploy();
           break;
         case "Add a Department":
-          deptAdd(answer.generalMenu);
+          deptAdd();
           break;
         case "Add a Role":
           break;
@@ -107,9 +107,9 @@ function generalMenu() {
           break;
         case "Update an Employee Role":
           break;
-        case "Exit App":
+        default:
           process.exit();
-          break;
+        
       }
     });
 }
