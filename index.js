@@ -12,7 +12,7 @@ const db = mysql.createConnection(
 );
 
 function viewAllDept(answer) {
-  db.promise().query("SELECT name FROM department;")
+  db.promise().query("SELECT * FROM department;")
           .then( ([rows]) => {
             console.table(rows);
           }).then(() => {generalMenu()})
@@ -21,7 +21,7 @@ function viewAllDept(answer) {
 };
 
 function viewAllRoles(answer) {
-  db.promise().query("SELECT title FROM role;")
+  db.promise().query("SELECT * FROM role;")
           .then( ([rows]) => {
             console.table(rows);
           }).then(() => {generalMenu()})
@@ -30,7 +30,12 @@ function viewAllRoles(answer) {
 };
 
 function viewAllEmploy(answer) {
-  db.promise().query(`SELECT CONCAT(employee.first_name, " ", employee.last_name) AS name FROM employee;`)
+  db.promise().query(`select
+  a.id,
+  CONCAT(a.first_name, " ", a.last_name) AS name,
+  CONCAT(b.first_name, " ", b.last_name) AS manager
+from employee AS a LEFT JOIN employee AS b
+on a.manager_id = b.id;;`)
           .then( ([rows]) => {
             console.table(rows);
           }).then(() => {generalMenu()})
