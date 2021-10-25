@@ -8,3 +8,5 @@ from employee AS a LEFT JOIN employee AS b
 on a.manager_id = b.id;
 
 select * from department;
+
+SELECT CONCAT(employee.first_name, " ", employee.last_name) AS name FROM employee;

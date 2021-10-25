@@ -11,37 +11,46 @@ const db = mysql.createConnection(
 );
 
 function viewAllDept(answer) {
-  db.promise().query("SELECT * FROM department;")
+  db.promise().query("SELECT name FROM department;")
           .then( ([rows]) => {
             console.table(rows);
-          })
+          }).then(() => {generalMenu()})
           .catch(console.log);
-          inquirer
-      .prompt([
-        {
-          type: "list",
-          name: "askAgain",
-          message: "Would you like to continue?",
-          choices: ["Yes", "No"],
-        },
-      ])
-      .then((answer) => {
-          if (answer === "Yes") {
-            startAgain();
-          } else {
-            process.exit();
-          }
           
-})
 };
 
-function startAgain() {
-  console.clear();
-  generalMenu();
+function viewAllRoles(answer) {
+  db.promise().query("SELECT title FROM role;")
+          .then( ([rows]) => {
+            console.table(rows);
+          }).then(() => {generalMenu()})
+          .catch(console.log);
+          
 };
+
+function viewAllEmploy(answer) {
+  db.promise().query(`SELECT CONCAT(employee.first_name, " ", employee.last_name) AS name FROM employee;`)
+          .then( ([rows]) => {
+            console.table(rows);
+          }).then(() => {generalMenu()})
+          .catch(console.log);
+          
+};
+
+function deptAdd(answer) {
+  inquirer.prompt(
+    [ {
+      type: "input",
+      name: "deptName",
+      message: "What is the name of the Department?",
+    }]
+  ).then((answer) => {
+    db.promise().query(`insert into department (name) values (${answer.deptAdd});`)
+
+  });
+}
 
   function generalMenu() {
-    console.log("Welcome to the Employee Database!");
     inquirer
       .prompt([
         {
@@ -54,18 +63,19 @@ function startAgain() {
           "Add a Department", 
           "Add a Role", 
           "Add an Employee", 
-          "Update an Employee Role"],
+          "Update an Employee Role",
+        "Exit App"],
         },
       ])
       .then((answer) => {
         switch(answer.generalMenu) {
           case "View All Departments": viewAllDept(answer.generalMenu);
             break;
-          case "View All Roles":
+          case "View All Roles": viewAllRoles(answer.generalMenu);
             break;
-          case "View All Employees":
+          case "View All Employees": viewAllEmploy(answer.generalMenu);
             break;
-          case "Add a Department":
+          case "Add a Department": deptAdd(answer.generalMenu);
             break;
           case "Add a Role":
             break;
@@ -73,8 +83,11 @@ function startAgain() {
             break;
           case "Update an Employee Role":
             break;
+            case "Exit App": process.exit();
+              break;
         }
       });
   }
 
+console.log("Welcome to the Employee Database!");
 generalMenu();
