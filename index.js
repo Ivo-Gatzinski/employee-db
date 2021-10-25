@@ -22,7 +22,7 @@ function viewAllDept(answer) {
 function viewAllRoles(answer) {
   return db
     .promise()
-    .query("SELECT * FROM role;")
+    .query("select role.id, title, name AS department, salary from role JOIN department on role.department_id = department.id;")
     .then(([rows]) => {
       console.table(rows);
       return generalMenu();
