@@ -1,3 +1,4 @@
+const { notEqual } = require("assert");
 const inquirer = require("inquirer");
 const mysql = require("mysql2");
 
@@ -45,10 +46,11 @@ function deptAdd(answer) {
       message: "What is the name of the Department?",
     }]
   ).then((answer) => {
-    db.promise().query(`insert into department (name) values (${answer.deptAdd});`)
-
+    db.promise().query(`insert into department (name) values ("${answer.deptName}");`)
+    .then(() => { console.log("Department added!")})
+    .then(() => {generalMenu()})
   });
-}
+};
 
   function generalMenu() {
     inquirer
