@@ -68,9 +68,39 @@ function deptAdd() {
     .then((answer) => {
       return db
         .promise()
-        .query(`insert into department (name) values ("${answer.deptName}");`)
+        .query('insert into department set ?', [{name: answer.deptName}])
         .then(() => {
           console.log("Department added!");
+          return generalMenu();
+        });
+    });
+}
+
+function addRole() {
+  return inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "roleName",
+        message: "What is the name of the Role?",
+      },
+      {
+        type: "input",
+        name: "salary",
+        message: "What is the salary of the Role?",
+      },
+      {
+      type: "input",
+       name: "department",
+       message: "What is the Department ID of the Role?",
+      },
+    ])
+    .then((answer) => {
+      return db
+        .promise()
+        .query(`insert into role set ?;`, [{title: answer.roleName, salary: answer.salary, department_id: answer.department} ])
+        .then(() => {
+          console.log("Role added!");
           return generalMenu();
         });
     });
@@ -110,6 +140,7 @@ function generalMenu() {
           deptAdd();
           break;
         case "Add a Role":
+          addRole();
           break;
         case "Add an Employee":
           break;
@@ -121,5 +152,5 @@ function generalMenu() {
     });
 }
 
-
+console.log("Welcome to the Department Database!");
        generalMenu();
