@@ -106,6 +106,41 @@ function addRole() {
     });
 }
 
+function addEmpl() {
+  return inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "firstName",
+        message: "What is the first name of the employee?",
+      },
+      {
+        type: "input",
+        name: "lastName",
+        message: "What is the last name of the employee?",
+      },
+      {
+      type: "input",
+       name: "roleId",
+       message: "What is the Role ID of the employee?",
+      },
+      {
+        type: "input",
+         name: "managerId",
+         message: "What is the Manager ID of the employee?",
+        },
+    ])
+    .then((answer) => {
+      return db
+        .promise()
+        .query(`insert into employee set ?;`, [{first_name: answer.firstName, last_name: answer.lastName, role_id: answer.roleId, manager_id: answer.managerId} ])
+        .then(() => {
+          console.log("Employee added!");
+          return generalMenu();
+        });
+    });
+}
+
 function generalMenu() {
   return inquirer
     .prompt([
@@ -143,11 +178,13 @@ function generalMenu() {
           addRole();
           break;
         case "Add an Employee":
+          addEmpl();
           break;
         case "Update an Employee Role":
           break;
         default:
-          process.exit();
+          db.end();
+          console.log("Goodbye!");
       }
     });
 }
