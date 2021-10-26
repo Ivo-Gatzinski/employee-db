@@ -22,7 +22,9 @@ function viewAllDept() {
 function viewAllRoles() {
   return db
     .promise()
-    .query("select role.id, title, name AS department, salary from role JOIN department on role.department_id = department.id;")
+    .query(
+      "select role.id, title, name AS department, salary from role JOIN department on role.department_id = department.id;"
+    )
     .then(([rows]) => {
       console.table(rows);
       return generalMenu();
@@ -35,11 +37,17 @@ function viewAllEmploy() {
     .promise()
     .query(
       `select
-  a.id,
-  CONCAT(a.first_name, " ", a.last_name) AS name,
-  CONCAT(b.first_name, " ", b.last_name) AS manager
-from employee AS a LEFT JOIN employee AS b
-on a.manager_id = b.id;`
+      a.id,
+      CONCAT(a.first_name, " ", a.last_name) AS name,
+      CONCAT(b.first_name, " ", b.last_name) AS manager,
+      role.title as role, 
+      role.salary,
+      department.name as department
+    from employee AS a 
+    LEFT JOIN employee AS b
+    on a.manager_id = b.id
+    JOIN role on a.role_id = role.id
+    JOIN department on role.department_id = department.id;`
     )
     .then(([rows]) => {
       console.table(rows);
@@ -109,10 +117,9 @@ function generalMenu() {
           break;
         default:
           process.exit();
-        
       }
     });
 }
 
-console.log("Welcome to the Employee Database!");
-generalMenu();
+
+       generalMenu();
