@@ -157,14 +157,11 @@ async function emplUpdate() {
 
     const [rows] = await db.promise().query(selectEmplSql);
 
-    // Create array of objects for inquirer choices. Each element is an object
-    // with { name: "Description for user", value: trip }
     const choices = rows.map((employees) => ({
       name: `${employees.name}`,
       value: employees,
     }));
 
-    // This will be a trip object from the value property in the choices.
     const { employee } = await inquirer.prompt([
       {
         type: "list",
